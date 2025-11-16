@@ -24,8 +24,6 @@ const QUERY_HOME_PAGE = {
 };
 
 export async function getHomePage() {
-  "use cache";
-  cacheLife({ expire: 60 }); // Cache for 60 seconds
   const query = qs.stringify(QUERY_HOME_PAGE, { encodeValuesOnly: true });
   const response = await getStrapiData(`/api/home-page?${query}`);
   return response?.data;
@@ -33,7 +31,9 @@ export async function getHomePage() {
 
 export async function getStrapiData(url: string) {
   try {
-    const res = await fetch(`${STRAPI_BASE_URL}${url}`);
+    const res = await fetch(`${STRAPI_BASE_URL}${url}`, {
+      next: { revalidate: 60 },
+    });
     if (!res.ok) {
       throw new Error(`Failed to fetch data from Strapi: ${res.statusText}`);
     }
