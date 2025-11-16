@@ -1,4 +1,3 @@
-import { cacheLife } from "next/cache";
 import qs from "qs";
 
 export const STRAPI_BASE_URL =
